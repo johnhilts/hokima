@@ -18,20 +18,21 @@ code/lisp/source/jfh/
 (defpackage #:hokima-web-app
   (:use #:common-lisp)
   (:local-nicknames
-   (#:config #:jfh-configuration)
-   (#:remoting #:jfh-remoting)
+   (#:config #:jfh-configuration) ;; not using?
+   (#:remoting #:jfh-remoting) ;; not using?
    (#:store #:jfh-store)
    (#:user #:jfh-user)
    (#:util #:jfh-utility)
    (#:auth #:jfh-web-auth)
    (#:web #:jfh-web-server))
-  ;; (:export
-  ;;  #:*web-configuration*
-  ;;  #:*static-paths-maps*
+  (:export
+    #:*web-configuration*
+    #:*static-paths-maps*
   ;;  #:setup-dispatch-for-all-html-files
   ;;  #:signup-page
   ;;  #:login-page
   ;;  #:find-user-info
   ;;  #:show-auth-failure
-  ;;  #:on-auth-hook)
+    ;;  #:on-auth-hook
+    )
   )
