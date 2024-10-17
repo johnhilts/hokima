@@ -1,6 +1,5 @@
 (in-package #:hokima-main)
 
-(defparameter *web-application* nil)
 (defparameter *remoting-configuration* nil)
 
 (defun application-start ()
@@ -11,19 +10,21 @@
 	      (jfh-web-server:add-static-path-map (car pair) (cadr pair)))
 	    hokima-web-app:*static-paths-maps*)))
 
-    (map-static-paths)
+    (setf jfh-store:*data-store-location*
+          (make-instance 'jfh-store:data-store-location :settings-file-path "./" :user-path-root "./users/"))
     
-    (let ((web-application (jfh-web-server:web-application-shell)))
+    (map-static-paths)
 
-      (setf web-app:*web-configuration* (jfh-web-server:web-configuration web-application))
+    (let ((web-configuration (jfh-web-server:make-web-configuration jfh-store:*data-store-location*)))
+      (setf web-app:*web-configuration* web-configuration)
       
       (let* ((remoting-configuration (jfh-remoting:make-remoting-configuration jfh-store:*data-store-location*))
              (actual-remoting-configuration (jfh-remoting:start-swank remoting-configuration)))
         (setf *remoting-configuration* actual-remoting-configuration))
 
-      (setf *web-application* web-application))))
+      (jfh-web-server:web-application-shell web-configuration))))
 
-(defun application-stop (&optional (stop-swank t) (web-application *web-application*) (remoting-configuration *remoting-configuration*))
+(defun application-stop (&optional (stop-swank t) (web-application jfh-web-server:*web-application*) (remoting-configuration *remoting-configuration*))
   "Use this to stop the application. Stopping swank is optional."
   (jfh-web-server:stop-web-app web-application)
   (if (and stop-swank remoting-configuration)
