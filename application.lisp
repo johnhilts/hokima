@@ -18,7 +18,7 @@
 
     (jfh-remoting:start-swank (jfh-configuration:bind-configuration 'jfh-remoting:remoting))
     
-    (jfh-web-server:web-application-shell (jfh-configuration:bind-configuration 'jfh-web-server:web)))))
+    (jfh-web-server:web-application-shell (jfh-configuration:bind-configuration 'jfh-web-server:web))))
 
 (defun application-stop (&optional (stop-swank t) (web-application jfh-web-server:*web-application*))
   "Use this to stop the application. Stopping swank is optional."

@@ -12,17 +12,17 @@
   (print "jfh-configuration loaded")
 
   (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/utility/")
-  (push #p"/home/jfh/code/lisp/source/jfh/utility//" asdf:*central-registry*)
+  (push #p"/home/jfh/code/lisp/source/jfh/utility/" asdf:*central-registry*)
   (asdf:load-system "jfh-utility")
   (print "jfh-utility loaded")
 
   (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/remoting/")
-  (push #p"/home/jfh/code/lisp/source/jfh/remoting//" asdf:*central-registry*)
+  (push #p"/home/jfh/code/lisp/source/jfh/remoting/" asdf:*central-registry*)
   (asdf:load-system "jfh-remoting")
   (print "jfh-remoting loaded")
 
   (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/user/")
-  (push #p"/home/jfh/code/lisp/source/jfh/user//" asdf:*central-registry*)
+  (push #p"/home/jfh/code/lisp/source/jfh/user/" asdf:*central-registry*)
   (asdf:load-system "jfh-user")
   (print "jfh-user loaded")
 
@@ -35,6 +35,16 @@
   (push #p"/home/jfh/code/lisp/source/jfh/web-auth/" asdf:*central-registry*)
   (asdf:load-system "jfh-web-auth")
   (print "jfh-web-auth loaded")
+
+  (swank:set-default-directory "/home/jfh/code/lisp/source/hokima/web-app/")
+  (push #p"/home/jfh/code/lisp/source/hokima/web-app/" asdf:*central-registry*)
+  (asdf:load-system "hokima-web-app")
+  (print "hokima-web-app loaded")
+
+  (swank:set-default-directory "/home/jfh/code/lisp/source/hokima/")
+  (push #p"/home/jfh/code/lisp/source/hokima/" asdf:*central-registry*)
+  (asdf:load-system "hokima-main")
+  (print "hokima-main loaded")
 
   ;; (swank:set-default-directory "/home/jfh/code/lisp/source/org2html/")
   ;; (push #p"/home/jfh/code/lisp/source/org2html/" asdf:*central-registry*)
