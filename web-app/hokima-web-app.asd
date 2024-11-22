@@ -13,5 +13,6 @@
                (:file common/code/utility)
                (:file common/code/user)
                (:file common/ui/page-include)
-	       (:file common/ui/auth/auth)))
+	       (:file common/ui/auth/auth)
+               (:file pages/page-handlers)))
 

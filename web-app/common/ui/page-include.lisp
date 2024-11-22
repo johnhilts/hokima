@@ -12,4 +12,4 @@
      (:title (who:str (format nil "Secrets Safe - ~A" title)))
      (:link :type "text/css"
             :rel "stylesheet"
-            :href (format nil "~A~A~D" (web:static-root *web-configuration*) "/styles.css?v=" (get-version))))))
+            :href (format nil "~A~A~D" (web:static-root (jfh-configuration:get-configuration 'web:web)) "/styles.css?v=" (get-version))))))
