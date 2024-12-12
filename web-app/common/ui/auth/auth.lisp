@@ -44,8 +44,8 @@
               (if signup-validation-successful
                   (progn
                     (add-user post-name post-user post-password)
-                    (let ((user-info (user:get-user-info post-user)))
-                      (auth:establish-user-session user-info))
+                    (let ((user-login (make-instance 'user:application-user-login :user-login post-user)))
+                      (jfh-web-server:fetch-or-create-user-session user-login))
                     (who:htm (:script :type "text/javascript"
                                       (who:str
                                        (ps:ps
