@@ -1,50 +1,34 @@
 (cl:in-package #:cl-user)
 
+(defparameter *jfh-app/home-folder*
+  (with-open-file (input "/etc/hokima.conf") ;; TODO add some kind of nice error handling here
+    (read-line input nil nil)))   ;; "/root/code/lisp/source" "/home/jfh/code/lisp/source"
+
+(defparameter *jfh-app/library-root-folder*
+"/jfh-lib"
+;;  "/jfh" ?? I think that's right for my home machine
+  )
+
+(defparameter *jfh-app/web-app-root-folder*
+"/hokima")
+
+(defun load-one-system (root system-root system-folder system-name)
+  (let ((system-fq (format nil "~A/~A/~A/" root system-root system-folder)))
+    (swank:set-default-directory system-fq)
+    (push (make-pathname :directory system-fq) asdf:*central-registry*)
+    (asdf:load-system system-name)
+    (format t "~A loaded" system-name)))
+
 (defun load-local-everything ()
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/store")
-  (push #p"/home/jfh/code/lisp/source/jfh/store/" asdf:*central-registry*)
-  (asdf:load-system "jfh-store")
-  (print "jfh-store loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/configuration/")
-  (push #p"/home/jfh/code/lisp/source/jfh/configuration/" asdf:*central-registry*)
-  (asdf:load-system "jfh-configuration")
-  (print "jfh-configuration loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/utility/")
-  (push #p"/home/jfh/code/lisp/source/jfh/utility/" asdf:*central-registry*)
-  (asdf:load-system "jfh-utility")
-  (print "jfh-utility loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/remoting/")
-  (push #p"/home/jfh/code/lisp/source/jfh/remoting/" asdf:*central-registry*)
-  (asdf:load-system "jfh-remoting")
-  (print "jfh-remoting loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/user/")
-  (push #p"/home/jfh/code/lisp/source/jfh/user/" asdf:*central-registry*)
-  (asdf:load-system "jfh-user")
-  (print "jfh-user loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/web-server/")
-  (push #p"/home/jfh/code/lisp/source/jfh/web-server/" asdf:*central-registry*)
-  (asdf:load-system "jfh-web-server")
-  (print "jfh-web-server loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/jfh/web-auth/")
-  (push #p"/home/jfh/code/lisp/source/jfh/web-auth/" asdf:*central-registry*)
-  (asdf:load-system "jfh-web-auth")
-  (print "jfh-web-auth loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/hokima/web-app/")
-  (push #p"/home/jfh/code/lisp/source/hokima/web-app/" asdf:*central-registry*)
-  (asdf:load-system "hokima-web-app")
-  (print "hokima-web-app loaded")
-
-  (swank:set-default-directory "/home/jfh/code/lisp/source/hokima/")
-  (push #p"/home/jfh/code/lisp/source/hokima/" asdf:*central-registry*)
-  (asdf:load-system "hokima-main")
-  (print "hokima-main loaded")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "store" "jfh-store")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "configuration" "jfh-configuration")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "utility" "jfh-utility")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "remoting" "jfh-remoting")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "user" "jfh-user")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-server" "jfh-web-server")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-auth" "jfh-web-auth")
+  (load-one-system *jfh-app/home-folder* *jfh-app/web-app-root-folder* "web-app" "hokima-web-app")
+  (load-one-system *jfh-app/home-folder* *jfh-app/web-app-root-folder* "" "hokima-main")
 
   ;; (swank:set-default-directory "/home/jfh/code/lisp/source/org2html/")
   ;; (push #p"/home/jfh/code/lisp/source/org2html/" asdf:*central-registry*)
