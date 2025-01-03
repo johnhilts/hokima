@@ -25,10 +25,18 @@
                          :user-name (user-name web-app-user))))
     (user:save-user file-name user-info-list web-app-user data-store-location)))
 
-(defun get-web-user-info (user-login)
+(defun get-web-user-info-OLD (user-login) ;; TODO this has to be converted into a function specializing on user-identifier
   "Derive web-user info from app-user."
   (let* ((application-user (user:get-user-info user-login))
          (user-id (user:user-id application-user))
+         (web-user-info (user:read-user-info user-id "web-app-user.sexp"))
+	 (secure-user-info (user:read-user-info user-id "hash.sexp"))) ;; TODO make the file name an exported string
+    (make-web-app-user (getf web-user-info :user-name) user-login (getf secure-user-info :user-password) user-id)))
+
+(defun get-web-user-info (user-id) ;; TODO (maybe?) this has to be converted into a function specializing on user-identifier
+  "Derive web-user info from app-user."
+  (let* ((application-user (user:get-user-info (make-instance 'jfh-user:application-user-id :user-id user-id)))
+         (user-login (user:user-login application-user))
          (web-user-info (user:read-user-info user-id "web-app-user.sexp"))
 	 (secure-user-info (user:read-user-info user-id "hash.sexp"))) ;; TODO make the file name an exported string
     (make-web-app-user (getf web-user-info :user-name) user-login (getf secure-user-info :user-password) user-id)))
