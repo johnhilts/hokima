@@ -20,10 +20,10 @@
 (defmethod user:save-application-user ((web-app-user web-app-user) (data-store-location jfh-store:data-store-location))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
   (call-next-method)
-  (let ((file-name "web-app-user.sexp")
+  (let ((file-name "web-app-user.sexp") ;; TODO use "label"
         (user-info-list (list
-                         :user-name (user-name web-app-user))))
-    (user:save-user file-name user-info-list web-app-user data-store-location)))
+                         :user-name (user-name web-app-user)))) ;; TODO move to mapping file - AND / OR, we could use CLOS!
+    (user:save-user file-name user-info-list web-app-user data-store-location))) ;; TODO remove data-store-location
 
 (defun get-web-user-info-OLD (user-login) ;; TODO this has to be converted into a function specializing on user-identifier
   "Derive web-user info from app-user."
