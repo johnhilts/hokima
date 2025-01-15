@@ -126,9 +126,10 @@
          (app-info (find-if (lambda (app) (string= post-app-name (name app))) *registered-apps*))
          (post-user-name (tbnl:post-parameter "user-name"))
          (post-user-email (tbnl:post-parameter "user-email"))
-         (post-user-fingerprint (tbnl:post-parameter "user-fingerprint")))
+         (*read-eval* nil)
+         (post-user-fingerprint (read-from-string (tbnl:post-parameter "user-fingerprint"))))
 
-    (add-user post-user-name post-user-email post-user-fingerprint (root-path app-info))
+    (add-external-user post-user-name post-user-email post-user-fingerprint (root-path app-info)) ;; TODO use DI instead of parameter for ROOT-PATH?
 
     (who:htm
      (who:str (render-app-info app-info))
