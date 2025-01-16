@@ -17,13 +17,13 @@
   "Constructor for web-app-user."
   (make-instance 'web-app-user :user-name user-name :user-login user-login :user-password user-password :user-id user-id))
 
-(defmethod user:save-application-user ((web-app-user web-app-user) (data-store-location jfh-store:data-store-location))
+(defmethod user:save-application-user ((web-app-user web-app-user))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
   (call-next-method)
   (let ((file-name "web-app-user.sexp") ;; TODO use "label"
         (user-info-list (list
                          :user-name (user-name web-app-user)))) ;; TODO move to mapping file - AND / OR, we could use CLOS!
-    (user:save-user file-name user-info-list web-app-user data-store-location))) ;; TODO remove data-store-location
+    (user:save-user file-name user-info-list web-app-user)))
 
 (defun get-web-user-info-OLD (user-login) ;; TODO this has to be converted into a function specializing on user-identifier
   "Derive web-user info from app-user."

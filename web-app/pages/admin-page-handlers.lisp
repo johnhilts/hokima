@@ -129,7 +129,9 @@
          (*read-eval* nil)
          (post-user-fingerprint (read-from-string (tbnl:post-parameter "user-fingerprint"))))
 
-    (add-external-user post-user-name post-user-email post-user-fingerprint (root-path app-info)) ;; TODO use DI instead of parameter for ROOT-PATH?
+    (let* ((app-root (root-path app-info))
+           (jfh-store:*data-store-location* (jfh-store:make-data-store app-root)))
+      (add-external-user post-user-name post-user-email post-user-fingerprint))
 
     (who:htm
      (who:str (render-app-info app-info))

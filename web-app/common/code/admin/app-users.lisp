@@ -1,10 +1,9 @@
 ;;;; Web pages for hokima
 (cl:in-package #:hokima-web-app)
 
-(defun add-external-user (user-name user-email user-fingerprint app-root)
+(defun add-external-user (user-name user-email user-fingerprint)
   "Add new user for a different app."
-  (let ((data-store-location (make-instance 'jfh-store:data-store-location :user-path-root (format nil "~A/users/" app-root) :settings-file-path app-root)))
-    (user:save-new-application-user (make-external-app-user user-name user-email user-fingerprint) data-store-location)))
+  (user:save-new-application-user (make-external-app-user user-name user-email user-fingerprint)))
 
 (defun make-external-app-user (user-name user-login user-fingerprint &optional (user-id ""))
   "Constructor for a web-app-user for another application."
