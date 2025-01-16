@@ -11,7 +11,7 @@
 
 (defun add-user (user-name user-login user-password)
   "Add new user."
-  (user:save-new-application-user (make-web-app-user user-name user-login user-password) store:*data-store-location*))
+  (user:save-new-application-user (make-web-app-user user-name user-login user-password)))
 
 (defun make-web-app-user (user-name user-login user-password &optional (user-id ""))
   "Constructor for web-app-user."

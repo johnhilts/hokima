@@ -8,11 +8,9 @@
 	      (jfh-web-server:add-static-path-map (car pair) (cadr pair)))
 	    hokima-web-app:*static-paths-maps*)))
 
-    (let ((application-configuration (jfh-configuration:bind-configuration 'jfh-configuration:application "./")))
-      (setf jfh-store:*data-store-location*
-            (make-instance 'jfh-store:data-store-location
-                           :settings-file-path (jfh-configuration:settings-file-path application-configuration)
-                           :user-path-root (jfh-configuration:user-path-root application-configuration))))
+    (let ((application-configuration (jfh-configuration:bind-configuration 'jfh-configuration:application)))
+      ;; NOTE - assuming user settings are in "./users" with no way to override
+      (setf jfh-store:*data-store-location* (jfh-store::make-data-store (jfh-configuration:settings-file-path application-configuration))))
     
     (map-static-paths)
 
