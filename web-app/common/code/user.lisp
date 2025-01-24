@@ -17,13 +17,16 @@
   "Constructor for web-app-user."
   (make-instance 'web-app-user :user-name user-name :user-login user-login :user-password user-password :user-id user-id))
 
+;; (defmethod jfh-store:serialize-object ((web-app-user web-app-user) (serialization-type (eql 'web-app-user)))
+;;   "Input: object and its serialization type."
+;;   (jfh-store:serialize-object->list web-app-user (list 'user-name)))
+
 (defmethod user:save-application-user ((web-app-user web-app-user))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
   (call-next-method)
-  (let ((file-name "web-app-user.sexp") ;; TODO use "label"
-        (user-info-list (list
-                         :user-name (user-name web-app-user)))) ;; TODO move to mapping file - AND / OR, we could use CLOS!
-    (user:save-user file-name user-info-list web-app-user)))
+  (let ((data (jfh-store:serialize-object->list web-app-user (list 'user-name)))
+        (user-store-object (make-instance 'jfh-store:user-store-object :label "web-app-user" :key (jfh-user:user-id web-app-user) :location (format nil "~A/users" jfh-store:*store-root-folder*))))
+    (jfh-store:save-user-data user-store-object data)))
 
 (defun get-web-user-info-OLD (user-login) ;; TODO this has to be converted into a function specializing on user-identifier
   "Derive web-user info from app-user."

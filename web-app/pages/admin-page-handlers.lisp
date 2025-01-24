@@ -129,8 +129,7 @@
          (*read-eval* nil)
          (post-user-fingerprint (read-from-string (tbnl:post-parameter "user-fingerprint"))))
 
-    (let* ((app-root (root-path app-info))
-           (jfh-store:*data-store-location* (jfh-store:make-data-store app-root)))
+    (let* ((jfh-store:*store-root-folder* (root-path app-info)))
       (add-external-user post-user-name post-user-email post-user-fingerprint))
 
     (who:htm
