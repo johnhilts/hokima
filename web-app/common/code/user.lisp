@@ -17,9 +17,9 @@
   "Constructor for web-app-user."
   (make-instance 'web-app-user :user-name user-name :user-login user-login :user-password user-password :user-id user-id))
 
-;; (defmethod jfh-store:serialize-object ((web-app-user web-app-user) (serialization-type (eql 'web-app-user)))
-;;   "Input: object and its serialization type."
-;;   (jfh-store:serialize-object->list web-app-user (list 'user-name)))
+(defmethod serialize-object ((web-app-user web-app-user))
+  "Input: object and its serialization type."
+  (jfh-store:serialize-object->list web-app-user (list 'user-name)))
 
 (defmethod user:save-application-user ((web-app-user web-app-user))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
