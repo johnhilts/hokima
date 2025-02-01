@@ -21,12 +21,19 @@
   "Input: object and its serialization type."
   (jfh-store:serialize-object->list web-app-user (list 'user-name)))
 
-(defmethod user:save-application-user ((web-app-user web-app-user))
+(defmethod user:save-application-user-OLD ((web-app-user web-app-user))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
   (call-next-method)
   (let ((data (jfh-store:serialize-object->list web-app-user (list 'user-name)))
         (user-store-object (make-instance 'jfh-store:user-store-object :label "web-app-user" :key (jfh-user:user-id web-app-user) :location (format nil "~A/users" jfh-store:*store-root-folder*))))
     (jfh-store:save-user-data user-store-object data)))
+
+(defmethod user:save-application-user ((web-app-user web-app-user))
+  "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
+  (call-next-method)
+  (let* ((data (jfh-store:serialize-object->list web-app-user (list 'user-name)))
+         (store-data (make-instance 'jfh-store:user-store-data :data data :label "web-app-user" :key (jfh-user:user-id web-app-user))))
+    (jfh-store:save-user-data store-data)))
 
 (defun get-web-user-info-OLD (user-login) ;; TODO this has to be converted into a function specializing on user-identifier
   "Derive web-user info from app-user."
