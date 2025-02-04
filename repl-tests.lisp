@@ -13,32 +13,54 @@
 (let ((obj (make-instance 'jfh-user:application-meta-user :user-id "20250201-2" :user-login "m4@here.com")))
   (string-downcase (symbol-name (class-name (class-of obj)))))
 
-(let ((list (list :one "one" :two "two" 'jfh-store::__file-name "application-meta-user")))
-               (format t "Everything 1: ~S~%" list)
-               (format t "~A, ~A~%" (getf list :one) (getf list 'jfh-store::__file-name))
-               (remf list 'jfh-store::__file-name)
-               (format t "Everything 2: ~S~%" list))
+;; get user login index
+(progn
+  (format t "~&*** Get User Login Index ***~%")
+  (jfh-store:get-data 'jfh-store:user-index-data))
+
+(progn
+  (format t "~&*** Get User Login Index, using user class ***~%")
+  (jfh-store:get-data 'jfh-user::user-index-entry))
+
+(progn
+  (format t "~&*** Get User Login Index, using user class ***~%")
+  (jfh-store:make-instance* 'jfh-user::user-index-entry :key "no-match"))
+
+(progn
+  (format t "~&*** Get User Login Index, using user class ***~%")
+  (jfh-store:make-instance* 'jfh-user::user-index-entry :key "20250203"))
+
+(progn
+  (let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
+    (format t "~&*** Get User Login Index, using user class ***~%")
+    (jfh-store:get-data 'jfh-user::user-index-entry)))
 
 ;; save user login index
-(let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
-  (jfh-store:save-data 
-   (make-instance 'jfh-store:user-index-store :label "user-login-index")
-   (make-instance 'jfh-store:user-index-data :serialized-data 
-                  (jfh-store:serialize-object->list
-                   (jfh-user::make-user-index-entry (make-instance 'jfh-user:application-user :user-login "me2@here.com" :user-id "20250131-2"))
-                   (list 'jfh-user:user-id 'jfh-user:user-login)))))
+(progn
+  (let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
+    (format t "~&*** Save User Login Index ***~%")
+    (jfh-store:save-object
+     (make-instance 'jfh-user::user-index-entry :user-login "20250203@test.com" :user-id "20250203")
+     (list 'jfh-user:user-login 'jfh-user:user-id))))
 
-(jfh-store:save-data 
- (make-instance 'jfh-store:user-index-store :label "user-login-index")
- (make-instance 'jfh-store:user-index-data :serialized-data 
-                (jfh-store:serialize-object->list
-                 (jfh-user::make-user-index-entry (make-instance 'jfh-user:application-user :user-login "me2@here.com" :user-id "20250131-2"))
-                 (list 'jfh-user:user-id 'jfh-user:user-login))))
+(progn
+  (format t "~&*** Save User Login Index ***~%")
+  (jfh-store:save-object
+   (make-instance 'jfh-user::user-index-entry :user-login "20250203@test.com" :user-id "20250203-2")
+   (list 'jfh-user:user-login 'jfh-user:user-id)))
 
 ;; save meta-user
 ;; call the method
 (let ((jfh-store:*store-root-folder* "/root/code/lisp/source/chasi"))
   (jfh-user::save-application-user (make-instance 'jfh-user:application-meta-user :user-login "you@there.com" :user-id "20250126-0913")))
+
+(progn
+  (format t "~&*** Save Meta User ***~%")
+  (jfh-store:save-object
+   (make-instance 'jfh-user:application-meta-user :user-login "20250203@test.com" :user-id "20250203-2")
+   (list 'jfh-user:user-login 'jfh-user:user-id 'jfh-user::disable 'jfh-user::create-date)
+   :key "20250203-2"))
+
 
 ;; call the inside of the method
 (let* ((application-user (make-instance 'jfh-user:application-meta-user :user-id "20250201-1" :user-login "m3@here.com"))
@@ -55,12 +77,26 @@
     (jfh-store:save-data store data)))
 
   
-;; save secure-user - TODO update
-(let ((jfh-store:*store-root-folder* "/root/code/lisp/source/chasi"))
-  (jfh-user::save-application-user (make-instance 'jfh-user:application-secure-user :user-id "20250126-1410" :user-api-key "the-api-key" :user-fingerprint #(1 2 3 4) :user-password "the secret password")))
+;; save secure-user
+(progn
+  (format t "~&*** Save Secure User ***~%")
+  (let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
+    (jfh-store:save-object
+     (make-instance 'jfh-user:application-secure-user :user-login "20250203@test.com" :user-id "20250203-2" :user-fingerprint #(1 2 3) :user-password "the secret password" :user-api-key "abc123-chasi")
+     (list 'jfh-user:user-fingerprint 'jfh-user:user-password 'jfh-user:user-api-key)
+     :key "20250203-2")))
 
-;; save web-user - TODO update
-(let ((jfh-store:*store-root-folder* "/root/code/lisp/source/chasi"))
-  (jfh-user::save-application-user (make-instance 'hokima-web-app::web-app-user :user-id "20250126-1421" :user-name "Mr Web User" :user-login "you@web.com" :user-password "password-not-set")))
+(progn
+  (format t "~&*** Save Secure User ***~%")
+  (jfh-store:save-object
+   (make-instance 'jfh-user:application-secure-user :user-login "20250203@test.com" :user-id "20250203-2" :user-fingerprint #(1 2 3) :user-password "the secret password" :user-api-key "abc123")
+   (list 'jfh-user:user-fingerprint 'jfh-user:user-password 'jfh-user:user-api-key)
+   :key "20250203-2"))
+
+;; save web-user
+(progn
+  (format t "~&*** Save Web User ***~%")
+  (let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
+    (jfh-user:save-new-application-user (hokima-web-app::make-external-app-user "Mr Web User" "20250203@test.com" #(2 3 69) "20250203-2"))))
 
 ;; (make-instance 'hokima-web-app::web-app-user :user-login "you@web.com" :user-password "password-not-set" :user-id user-id)
