@@ -20,15 +20,19 @@
 
 (progn
   (format t "~&*** Get User Login Index, using user class ***~%")
-  (jfh-store:get-data 'jfh-user::user-index-entry))
+  (jfh-store:get-data 'jfh-user::user-login-index-entry))
 
 (progn
   (format t "~&*** Get User Login Index, using user class ***~%")
-  (jfh-store:make-instance* 'jfh-user::user-index-entry :key "no-match"))
+  (jfh-store:make-instance* 'jfh-user::user-login-index-entry :key "no-match"))
 
 (progn
   (format t "~&*** Get User Login Index, using user class ***~%")
-  (jfh-store:make-instance* 'jfh-user::user-index-entry :key "20250203"))
+  (jfh-store:make-instance* 'jfh-user::user-login-index-entry :key "20250203"))
+
+(progn
+  (format t "~&*** Get User Fingerprint Index, using user class ***~%")
+  (jfh-store:make-instance* 'jfh-user::user-fingerprint-index-entry :key #(4 5 6) :field :user-fingerprint))
 
 (progn
   (let ((jfh-store:*app-data-path* "/root/code/lisp/source/chasi"))
