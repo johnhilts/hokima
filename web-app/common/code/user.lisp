@@ -45,6 +45,10 @@
   "Derive web-user info from app-user."
   (let* ((application-user (user:get-user-info (make-instance 'jfh-user:application-user-id :user-id user-id)))
          (user-login (user:user-login application-user))
-         (web-user-info (user:read-user-info user-id "web-app-user.sexp"))
-	 (secure-user-info (user:read-user-info user-id "hash.sexp"))) ;; TODO make the file name an exported string
-    (make-web-app-user (getf web-user-info :user-name) user-login (getf secure-user-info :user-password) user-id)))
+         (web-user-info (jfh-store:make-instance* 'web-app-user :key (jfh-user:user-id application-user))
+;; (user:read-user-info user-id "web-app-user.sexp")
+                        )
+	 (secure-user-info (jfh-store:make-instance* 'jfh-user:application-secure-user :key (jfh-user:user-id application-user))
+;; (user:read-user-info user-id "hash.sexp")
+                           )) ;; TODO make the file name an exported string
+    (make-web-app-user (user-name web-user-info) user-login (jfh-user:user-password secure-user-info) user-id)))

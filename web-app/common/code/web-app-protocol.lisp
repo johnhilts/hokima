@@ -6,3 +6,10 @@
     :reader user-name
     :initarg :user-name))
   (:documentation "Web Application user info."))
+
+(defmethod print-object ((application-user web-app-user) stream)
+  "Print application user."
+  (print-unreadable-object (application-user stream :type t)
+    (with-accessors ((user-name user-name)) application-user
+      (format stream
+	      "User Name: ~A" user-name))))
