@@ -10,7 +10,7 @@
 
     (let ((application-configuration (jfh-configuration:bind-configuration 'jfh-configuration:application)))
       ;; NOTE - assuming user settings are in "./users" with no way to override
-      (setf jfh-store:*data-store-location* (jfh-store::make-data-store (jfh-configuration:settings-file-path application-configuration))))
+      (setf jfh-store:*app-data-path* (jfh-configuration:settings-file-path application-configuration)))
     
     (map-static-paths)
 

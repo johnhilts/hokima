@@ -17,7 +17,7 @@
     (swank:set-default-directory system-fq)
     (push (make-pathname :directory system-fq) asdf:*central-registry*)
     (asdf:load-system system-name)
-    (format t "~A loaded" system-name)))
+    (format t "~&~A loaded.~%" system-name)))
 
 (defun load-local-everything ()
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "store" "jfh-store")
