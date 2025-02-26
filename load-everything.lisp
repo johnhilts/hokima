@@ -20,9 +20,9 @@
     (format t "~&~A loaded.~%" system-name)))
 
 (defun load-local-everything ()
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "utility" "jfh-utility")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "store" "jfh-store")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "configuration" "jfh-configuration")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "utility" "jfh-utility")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "remoting" "jfh-remoting")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "user" "jfh-user")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-server" "jfh-web-server")
