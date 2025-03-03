@@ -5,7 +5,8 @@
 
 (defparameter *static-paths-maps*
   '(("/favicon.ico" "ez-favicon.ico")
-    ("/styles.css" "static/styles.css")))
+    ("/styles.css" "static/styles.css")
+    ("/robots.txt" "static/robots.txt")))
 
 ;; (defun setup-dispatch-for-all-html-files ()
 ;;   (push
