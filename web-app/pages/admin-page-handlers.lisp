@@ -85,6 +85,9 @@
      (who:str (render-app-info app-info))
      (:div
       (:h2 (who:fmt "Create a new user for ~A - generate certificate." (name app-info)))
+      (:div
+       (who:fmt "<table cellpadding='10' border='1'><tr><th>Name</th><th>Email</th></tr><tr><td>~A</td><td>~A</td></tr></table>"
+                post-user-email post-user-name))
       (:p (who:fmt "At this point, use the certificate scripts to create a client certificate for <b>~A</b>, then click the *Next* button." post-user-email))
       (:div
        (:p (:u "Copy/paste-able one-liner for convenience:")

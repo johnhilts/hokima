@@ -19,7 +19,6 @@
 
 (defmethod user:save-application-user ((web-app-user web-app-user))
   "Input: web-app-user and app-configuration. Output: serialized web-app-user (sub-class specific fields only) . Persist application user info."
-  (call-next-method)
   (jfh-store:save-object web-app-user))
 
 (defun get-web-user-info (user-id) ;; TODO (maybe?) this has to be converted into a function specializing on user-identifier
