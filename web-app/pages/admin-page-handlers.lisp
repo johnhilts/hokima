@@ -54,7 +54,7 @@
   (:div
    (:form :action "/admin/app-manage-step2" :method "POST"
           (:select :name "app-name" :size "3"
-                   (:option :value "chasi" "Secret Safe"))
+                   (:option :value "chasi" "Chasi"))
           (:br)
           (:button :type "submit" "Next"))))
 
