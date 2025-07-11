@@ -1,11 +1,13 @@
 ;;;; Web pages for hokima
 (cl:in-package #:hokima-web-app)
 
-(defclass application-info ()
+(defclass external-application-configuration (jfh-store:config-data)
   ((%name
     :reader name
-    :initarg :name
-    :initform "")
+    :initarg :name)
+   (%display-name
+    :reader display-name
+    :initarg :display-name)
    (%root-path
     :reader root-path
     :initarg :root-path
@@ -13,25 +15,44 @@
    (%application-auth-type
     :reader application-auth-type
     :initarg :application-auth-type
-    :initform :certificate) ;; other choices: :login, :api-key
+    :initform nil) ;; other choices: "login," "api-key"
    (%certificate-config-path
     :reader certificate-config-path
     :initarg :certificate-config-path
-    :initform "config")
+    :initform nil)
    (%certificate-path
     :reader certificate-path
     :initarg :certificate-path
-    :initform "certs")))
+    :initform nil)))
 
-(defparameter *registered-apps*
-  (list
-   (make-instance 'application-info
-                  :name "chasi"
-                  :root-path (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* "chasi"))
-                  :application-auth-type :certificate
-                  :certificate-config-path "config"
-                  :certificate-path (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* "cert-scripts/certs/openssl3/chasi-2025"))))
-  "list of registred apps managed in admin") ;; TODO get all this info from a config file
+(defmethod initialize-instance :after ((external-application-configuration external-application-configuration) &key)
+  "Initializations:
+- Properly hydrate ROOT-PATH and CERTIFICATE-PATH
+Assumptions:
+- This information is READ ONLY"
+  (let ((name (progn
+                #1=(slot-value external-application-configuration '%root-path)
+                (slot-value external-application-configuration '%name)))
+        (certificate-path (and
+                           (slot-boundp external-application-configuration '%certificate-path)
+                           #2=(slot-value external-application-configuration '%certificate-path))))
+    (setf #1# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* name)))
+    (when #2#
+      (setf #2# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* certificate-path))))))
+
+(defmethod print-object ((external-application-configuration external-application-configuration) stream)
+  "Print external application configuration."
+  (print-unreadable-object (external-application-configuration stream :type t)
+    (with-accessors
+          ((name name) (display-name display-name) (root-path root-path) (application-auth-type application-auth-type)
+           (certificate-config-path certificate-config-path) (certificate-path certificate-path))
+        external-application-configuration
+      (format stream
+	      "App Name: ~A (~A), App Path: ~A, Auth Type: ~A~:[~:;, Cert Config Path: ~:*~A, ~]~:[~:;Cert Path: ~:*~A ~]"
+              name display-name root-path application-auth-type certificate-config-path certificate-path))))
+
+(defparameter *registered-apps* (jfh-store:make-instance-list 'external-application-configuration)
+  "list of registred apps managed in admin")
 
 (define-admin-page (admin-page "/admin") ()
   "Main Entry point for hokima admin."
@@ -43,7 +64,7 @@
     (:div
      (who:fmt "<h2>Selected App</h2><table cellpadding='10' border='1'><tr><th>App Name</th><td>~A</td></tr><tr><th>App root</th><td>~A</td></tr><tr><th>Auth type</th><td>~A</td></tr>"
               (name app-info) (root-path app-info) (application-auth-type app-info))
-     (when (eql :certificate (application-auth-type app-info))
+     (when (string= "certificate" (application-auth-type app-info))
        (who:fmt "<tr><th>Cert config path</th><td>~A</td></tr><tr><th>Cert save path</th><td>~A</td></tr>"
                 (certificate-config-path app-info) (certificate-path app-info)))
      (who:fmt "</table>"))))
@@ -53,8 +74,8 @@
   (:div "Select app to manage")
   (:div
    (:form :action "/admin/app-manage-step2" :method "POST"
-          (:select :name "app-name" :size "3"
-                   (:option :value "chasi" "Chasi"))
+          (:select :name "app-name" :size "4"
+                   (loop for app in *registered-apps* collect (who:htm (:option :value  (name app) (who:str (display-name app))))))
           (:br)
           (:button :type "submit" "Next"))))
 
