@@ -1,56 +1,6 @@
 ;;;; Web pages for hokima
 (cl:in-package #:hokima-web-app)
 
-(defclass external-application-configuration (jfh-store:config-data)
-  ((%name
-    :reader name
-    :initarg :name)
-   (%display-name
-    :reader display-name
-    :initarg :display-name)
-   (%root-path
-    :reader root-path
-    :initarg :root-path
-    :initform "")
-   (%application-auth-type
-    :reader application-auth-type
-    :initarg :application-auth-type
-    :initform nil) ;; other choices: "login," "api-key"
-   (%certificate-config-path
-    :reader certificate-config-path
-    :initarg :certificate-config-path
-    :initform nil)
-   (%certificate-path
-    :reader certificate-path
-    :initarg :certificate-path
-    :initform nil)))
-
-(defmethod initialize-instance :after ((external-application-configuration external-application-configuration) &key)
-  "Initializations:
-- Properly hydrate ROOT-PATH and CERTIFICATE-PATH
-Assumptions:
-- This information is READ ONLY"
-  (let ((name (progn
-                #1=(slot-value external-application-configuration '%root-path)
-                (slot-value external-application-configuration '%name)))
-        (certificate-path (and
-                           (slot-boundp external-application-configuration '%certificate-path)
-                           #2=(slot-value external-application-configuration '%certificate-path))))
-    (setf #1# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* name)))
-    (when #2#
-      (setf #2# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* certificate-path))))))
-
-(defmethod print-object ((external-application-configuration external-application-configuration) stream)
-  "Print external application configuration."
-  (print-unreadable-object (external-application-configuration stream :type t)
-    (with-accessors
-          ((name name) (display-name display-name) (root-path root-path) (application-auth-type application-auth-type)
-           (certificate-config-path certificate-config-path) (certificate-path certificate-path))
-        external-application-configuration
-      (format stream
-	      "App Name: ~A (~A), App Path: ~A, Auth Type: ~A~:[~:;, Cert Config Path: ~:*~A, ~]~:[~:;Cert Path: ~:*~A ~]"
-              name display-name root-path application-auth-type certificate-config-path certificate-path))))
-
 (defparameter *registered-apps* (jfh-store:make-instance-list 'external-application-configuration)
   "list of registred apps managed in admin")
 

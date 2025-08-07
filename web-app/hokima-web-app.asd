@@ -8,6 +8,8 @@
   :serial t
   :depends-on (#:hunchentoot #:parenscript #:cl-json #:cl-who #:jfh-utility #:jfh-web-server)
   :components ((:file package)
+               (:file hokima-web-app-protocol)
+               (:file hokima-web-app-implementation)
                (:file common/code/admin/app-users)
                (:file common/code/configure)
                (:file common/code/auth)

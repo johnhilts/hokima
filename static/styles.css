@@ -42,3 +42,24 @@ main[data-astro-cid-egg7nqdx] {
     max-width: 50ch;
     margin: 0 auto
 }
+
+.input-container {
+    position: relative;
+    display: inline-block;
+}
+
+.password-input {
+    width: 200px;
+    padding-right: 40px; /* Leave space for the toggle text */
+}
+
+.toggle-text {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: blue;
+    font-size: 14px;
+    font-weight: bold;
+}
