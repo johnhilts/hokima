@@ -33,6 +33,5 @@ code/lisp/source/jfh/
   ;;  #:login-page
   ;;  #:find-user-info
   ;;  #:show-auth-failure
-    ;;  #:on-auth-hook
     )
   )
