@@ -1,8 +1,20 @@
 (cl:in-package #:cl-user)
 
+(defun get-app-config ()
+  (handler-bind
+      ((file-error
+         (lambda (e)
+           (format t "~&File error:~A~%~A~%" (file-error-pathname e) e)
+           (return-from get-app-config 'file-error)))
+       (error
+         (lambda (e)
+           (format t "~&Unknown error: ~A~%" e)
+           (return-from get-app-config 'error))))
+    (with-open-file (input "/etc/hokima.conf")
+      (read-line input nil nil))))
+
 (defparameter *jfh-app/home-folder*
-  (with-open-file (input "/etc/hokima.conf") ;; TODO add some kind of nice error handling here
-    (read-line input nil nil)))   ;; "/root/code/lisp/source" "/home/jfh/code/lisp/source"
+  (get-app-config))   ;; "/root/code/lisp/source" "/home/jfh/code/lisp/source"
 
 (defparameter *jfh-app/library-root-folder*
 "/jfh-lib"
@@ -24,6 +36,7 @@
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "store" "jfh-store")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "configuration" "jfh-configuration")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "remoting" "jfh-remoting")
+  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "security" "jfh-security")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "user" "jfh-user")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-server" "jfh-web-server")
   (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-auth" "jfh-web-auth")
