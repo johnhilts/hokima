@@ -21,7 +21,7 @@
      (:body
       (:h2 "Use this page to Login!")
       (:form :method "post" :action "auth"
-             (:input :type "hidden" :name "redirect-back-to" :value (or redirect-back-to "/???")) ;; TODO where do we go?
+             (:input :type "hidden" :name "redirect-back-to" :value (or redirect-back-to "/admin"))
              (:div :id "login-input-div"
               (:div (:input :name "user-login" :type "email" :placeholder "Login" :class "login-input" :autofocus "autofocus"))
               (:div (:input :name "password" :type "password" :placeholder "Password" :class "login-input"))
