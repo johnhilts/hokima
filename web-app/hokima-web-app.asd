@@ -12,7 +12,7 @@
                (:file hokima-web-app-implementation)
                (:file common/code/admin/app-users)
                (:file common/code/configure)
-               (:file common/code/auth)
+               ;; (:file common/code/auth) ;
                (:file common/code/web-app-protocol)
                (:file common/code/utility)
                (:file common/code/user)

@@ -1,4 +1,18 @@
+
 (cl:in-package #:cl-user)
+
+;;; ********************
+;;; **** Globals ****
+;;; ********************
+(defpackage #:jfh-globals
+  (:use #:common-lisp)
+  (:export
+   #:*jfh-app/home-folder*
+   #:*jfh-app/library-root-folder*
+   #:*jfh-app/web-app-root-folder*
+   #:*jfh-app/cffi-root-folder*))
+
+(in-package #:jfh-globals)
 
 (defun get-app-config ()
   (handler-bind
@@ -14,15 +28,18 @@
       (read-line input nil nil))))
 
 (defparameter *jfh-app/home-folder*
-  (get-app-config))   ;; "/root/code/lisp/source" "/home/jfh/code/lisp/source"
+  (get-app-config))
 
-(defparameter *jfh-app/library-root-folder*
-"/jfh-lib"
-;;  "/jfh" ?? I think that's right for my home machine
-  )
+(defparameter *jfh-app/library-root-folder* "/jfh-lib")
 
-(defparameter *jfh-app/web-app-root-folder*
-"/hokima")
+(defparameter *jfh-app/web-app-root-folder* "/hokima")
+
+(defparameter *jfh-app/cffi-root-folder* "/ffi/c")
+
+;;; ****************************
+;;; Load Everything with asdf
+;;; ****************************
+(in-package #:cl-user)
 
 (defun load-one-system (root system-root system-folder system-name)
   (let ((system-fq (format nil "~A/~A/~A/" root system-root system-folder)))
@@ -32,16 +49,17 @@
     (format t "~&~A loaded.~%" system-name)))
 
 (defun load-local-everything ()
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "utility" "jfh-utility")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "store" "jfh-store")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "configuration" "jfh-configuration")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "remoting" "jfh-remoting")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "security" "jfh-security")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "user" "jfh-user")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-server" "jfh-web-server")
-  (load-one-system *jfh-app/home-folder* *jfh-app/library-root-folder* "web-auth" "jfh-web-auth")
-  (load-one-system *jfh-app/home-folder* *jfh-app/web-app-root-folder* "web-app" "hokima-web-app")
-  (load-one-system *jfh-app/home-folder* *jfh-app/web-app-root-folder* "" "hokima-main")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "utility" "jfh-utility")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "store" "jfh-store")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "configuration" "jfh-configuration")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "remoting" "jfh-remoting")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "security" "jfh-security")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "auth" "jfh-auth")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "user" "jfh-user")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "web-server" "jfh-web-server")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/library-root-folder* "web-auth" "jfh-web-auth")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/web-app-root-folder* "web-app" "hokima-web-app")
+  (load-one-system jfh-globals:*jfh-app/home-folder* jfh-globals:*jfh-app/web-app-root-folder* "" "hokima-main")
 
   ;; (swank:set-default-directory "/home/jfh/code/lisp/source/org2html/")
   ;; (push #p"/home/jfh/code/lisp/source/org2html/" asdf:*central-registry*)

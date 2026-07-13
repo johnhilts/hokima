@@ -11,9 +11,9 @@ Assumptions:
         (certificate-path (and
                            (slot-boundp external-application-configuration '%certificate-path)
                            #2=(slot-value external-application-configuration '%certificate-path))))
-    (setf #1# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* name)))
+    (setf #1# (format nil (format nil "~A/~A" jfh-globals::*jfh-app/home-folder* name)))
     (when #2#
-      (setf #2# (format nil (format nil "~A/~A" cl-user::*jfh-app/home-folder* certificate-path))))))
+      (setf #2# (format nil (format nil "~A/~A" jfh-globals::*jfh-app/home-folder* certificate-path))))))
 
 (defmethod print-object ((external-application-configuration external-application-configuration) stream)
   "Print external application configuration."

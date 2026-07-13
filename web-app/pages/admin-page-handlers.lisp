@@ -78,7 +78,7 @@
          (post-user-name (tbnl:post-parameter "user-name"))
          (post-user-email (tbnl:post-parameter "user-email"))
          ;; TODO - if AUTH:GET-CERTIFICATE-FINGERPRINT-FROM-FILE fails, handle gracefully!
-         (fingerprint (auth:get-certificate-fingerprint-from-file (certificate-path app-info) post-user-email)))
+         (fingerprint (jfh-auth:get-certificate-fingerprint-from-file (certificate-path app-info) post-user-email)))
     (who:htm
      (who:str (render-app-info app-info))
      (:div
