@@ -1,16 +1,16 @@
 ;;;; functions for auth related to this web app; usually called from a page handler
 (cl:in-package #:hokima-web-app)
 
-;; (defmethod jfh-web-auth:show-auth-failure ()
-;;   "Generate page contents to display when auth fails."
-;;   (who:with-html-output-to-string
-;;       (*standard-output* nil :prologue t :indent t)
-;;     (:html
-;;      (who:str (common-header "Auth Failure"))
-;;      (:body
-;;       (:h2 "Authorization failed!")
-;;       (:div "User or password didn't match"
-;;             (:a :href "/login" "Click here to try again!"))))))
+(defmethod jfh-auth:on-auth-failure ()
+  "Generate page contents to display when auth fails."
+  (who:with-html-output-to-string
+      (*standard-output* nil :prologue t :indent t)
+    (:html
+     (who:str (common-header "Auth Failure"))
+     (:body
+      (:h2 "Authorization failed!")
+      (:div "User or password didn't match"
+            (:a :href "/login" "Click here to try again!"))))))
 
 (defmethod jfh-web-auth:login-page (redirect-back-to)
   "Input: URL. Redirect back to the given URL once logged in."
